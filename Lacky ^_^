@@ -1,268 +1,57 @@
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local CoreGui = game:GetService("CoreGui")
-local UserInputService = game:GetService("UserInputService")
-local localPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
-local protectionEnabled, isMinimized, selectedPlayer, protectionConnection = false, false, nil, nil
-
-if CoreGui:FindFirstChild("LackyAntiCuff") then CoreGui.LackyAntiCuff:Destroy() end
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "LackyAntiCuff"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = CoreGui
-
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 260, 0, 180)
-MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 65, 85)
-MainFrame.BackgroundTransparency = 0.25
-MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true
-MainFrame.Parent = ScreenGui
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 8)
-UICorner.Parent = MainFrame
-
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Size = UDim2.new(1, -40, 0, 30)
-TitleLabel.Position = UDim2.new(0, 10, 0, 0)
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "Lacky ^_"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 16
-TitleLabel.Font = Enum.Font.SourceSansBold
-TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-TitleLabel.Parent = MainFrame
-
-local MinimizeButton = Instance.new("TextButton")
-MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
-MinimizeButton.Position = UDim2.new(1, -30, 0, 2.5)
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(30, 80, 100)
-MinimizeButton.BackgroundTransparency = 0.3
-MinimizeButton.TextColor3 = Color3.fromRGB(230, 245, 255)
-MinimizeButton.Text = "-"
-MinimizeButton.TextSize = 18
-MinimizeButton.Font = Enum.Font.SourceSansBold
-MinimizeButton.Parent = MainFrame
-
-local ButtonCorner = Instance.new("UICorner")
-ButtonCorner.CornerRadius = UDim.new(0, 4)
-ButtonCorner.Parent = MinimizeButton
-
-local SideMenu = Instance.new("Frame")
-SideMenu.Size = UDim2.new(0, 80, 1, -30)
-SideMenu.Position = UDim2.new(0, 0, 0, 30)
-SideMenu.BackgroundTransparency = 1
-SideMenu.Parent = MainFrame
-
-local UIListSide = Instance.new("UIListLayout")
-UIListSide.Padding = UDim.new(0, 0)
-UIListSide.HorizontalAlignment = Enum.HorizontalAlignment.Center
-UIListSide.Parent = SideMenu
-
-local ContentFrame = Instance.new("Frame")
-ContentFrame.Size = UDim2.new(1, -80, 1, -30)
-ContentFrame.Position = UDim2.new(0, 80, 0, 30)
-ContentFrame.BackgroundTransparency = 1
-ContentFrame.Parent = MainFrame
-
-local Tab1_Shield = Instance.new("Frame")
-Tab1_Shield.Size = UDim2.new(1, 0, 1, 0)
-Tab1_Shield.BackgroundTransparency = 1
-Tab1_Shield.Parent = ContentFrame
-
-local Tab2_Combat = Instance.new("Frame")
-Tab2_Combat.Size = UDim2.new(1, 0, 1, 0)
-Tab2_Combat.BackgroundTransparency = 1
-Tab2_Combat.Visible = false
-Tab2_Combat.Parent = ContentFrame
-
-local function createMenuButton(text, tabTarget)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, 0, 0, 35)
-    btn.BackgroundColor3 = Color3.fromRGB(25, 85, 105)
-    btn.BackgroundTransparency = 0.2
-    btn.BorderSizePixel = 0
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 13
-    btn.Font = Enum.Font.SourceSansBold
-    btn.Parent = SideMenu
-    btn.MouseButton1Click:Connect(function()
-        Tab1_Shield.Visible = false
-        Tab2_Combat.Visible = false
-        tabTarget.Visible = true
-    end)
+local R,P,C,U = game:GetService("RunService"),game:GetService("Players"),game:GetService("CoreGui"),game:GetService("UserInputService")
+local pl,cam,en,min,sel,con = P.LocalPlayer,workspace.CurrentCamera,false,false,nil,nil
+if C:FindFirstChild("LackyAntiCuff") then C.LackyAntiCuff:Destroy() end
+local G = Instance.new("ScreenGui",C) G.Name = "LackyAntiCuff" G.ResetOnSpawn = false
+local M = Instance.new("Frame",G) M.Size = UDim2.new(0,260,0,180) M.Position = UDim2.new(0.05,0,0.3,0) M.BackgroundColor3 = Color3.fromRGB(15,65,85) M.BackgroundTransparency = 0.25 M.BorderSizePixel = 0 M.Active = true M.Draggable = true
+Instance.new("UICorner",M).CornerRadius = UDim.new(0,8)
+local T = Instance.new("TextLabel",M) T.Size = UDim2.new(1,-40,0,30) T.Position = UDim2.new(0,10,0,0) T.BackgroundTransparency = 1 T.Text = "Lacky ^_" T.TextColor3 = Color3.fromRGB(255,255,255) T.TextSize = 16 T.Font = Enum.Font.SourceSansBold T.TextXAlignment = 0
+local B = Instance.new("TextButton",M) B.Size = UDim2.new(0,25,0,25) B.Position = UDim2.new(1,-30,0,2.5) B.BackgroundColor3 = Color3.fromRGB(30,80,100) B.BackgroundTransparency = 0.3 B.TextColor3 = Color3.fromRGB(230,245,255) B.Text = "-" B.TextSize = 18 B.Font = 4 Instance.new("UICorner",B).CornerRadius = UDim.new(0,4)
+local S = Instance.new("Frame",M) S.Size = UDim2.new(0,80,1,-30) S.Position = UDim2.new(0,0,0,30) S.BackgroundTransparency = 1
+local L = Instance.new("UIListLayout",S) L.HorizontalAlignment = 1
+local F = Instance.new("Frame",M) F.Size = UDim2.new(1,-80,1,-30) F.Position = UDim2.new(0,80,0,30) F.BackgroundTransparency = 1
+local T1,T2 = Instance.new("Frame",F),Instance.new("Frame",F) T1.Size = UDim2.new(1,0,1,0) T1.BackgroundTransparency = 1 T2.Size = UDim2.new(1,0,1,0) T2.BackgroundTransparency = 1 T2.Visible = false
+local function mB(t,tg)
+    local b = Instance.new("TextButton",S) b.Size = UDim2.new(1,0,0,35) b.BackgroundColor3 = Color3.fromRGB(25,85,105) b.BackgroundTransparency = 0.2 b.BorderSizePixel = 0 b.Text = t b.TextColor3 = Color3.fromRGB(255,255,255) b.TextSize = 13 b.Font = 4
+    b.MouseButton1Click:Connect(function() T1.Visible,T2.Visible = false,false tg.Visible = true end)
+end mB("Shield",T1) mB("Combat",T2)
+local Rz = Instance.new("ImageButton",M) Rz.Size = UDim2.new(0,16,0,16) Rz.Position = UDim2.new(1,-16,1,-16) Rz.BackgroundTransparency = 1 Rz.Image = "rbxassetid://6031094038" Rz.ImageColor3 = Color3.fromRGB(200,200,200) Rz.ZIndex = 5
+local rz,sS,sM = false,nil,nil
+Rz.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then rz,sS,sM = true,M.Size,U:GetMouseLocation() end end)
+U.InputChanged:Connect(function(i) if rz and i.UserInputType == Enum.UserInputType.MouseMovement then local d = U:GetMouseLocation() - sM if not min then M.Size = UDim2.new(0,math.max(240,sS.X.Offset+d.X),0,math.max(160,sS.Y.Offset+d.Y)) end end end)
+U.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then rz = false end end)
+local L1 = Instance.new("TextLabel",T1) L1.Size = UDim2.new(1,0,0,30) L1.Position = UDim2.new(0,0,0,20) L1.BackgroundTransparency = 1 L1.Text = "Status: OFF" L1.TextColor3 = Color3.fromRGB(255,130,130) L1.TextSize = 15 L1.Font = 3
+local Tb = Instance.new("TextButton",T1) Tb.Size = UDim2.new(0,80,0,30) Tb.Position = UDim2.new(0.5,-40,0,60) Tb.BackgroundColor3 = Color3.fromRGB(160,60,60) Tb.Text = "OFF" Tb.TextColor3 = Color3.fromRGB(255,255,255) Tb.TextSize = 14 Tb.Font = 4 Instance.new("UICorner",Tb).CornerRadius = UDim.new(0,6)
+local function prot()
+    local c = pl.Character if not c then return end local r = c:FindFirstChild("HumanoidRootPart") if r and r.Anchored then r.Anchored = false end local h = c:FindFirstChildOfClass("Humanoid") if h and h.SeatPart then h.Jump = true end
+    for _,p in pairs(c:GetChildren()) do if p:IsA("BasePart") then for _,o in pairs(p:GetChildren()) do if o:IsA("Weld") or o:IsA("ManualWeld") or o:IsA("WeldConstraint") then if o.Name ~= "RightGrip" and o.Name ~= "LeftGrip" then o:Destroy() end elseif o:IsA("BodyPosition") or o:IsA("BodyGyro") or o:IsA("RocketPropulsion") then o:Destroy() end end end end
 end
-
-createMenuButton("Shield", Tab1_Shield)
-createMenuButton("Combat", Tab2_Combat)
-
-local ResizeButton = Instance.new("ImageButton")
-ResizeButton.Size = UDim2.new(0, 16, 0, 16)
-ResizeButton.Position = UDim2.new(1, -16, 1, -16)
-ResizeButton.BackgroundTransparency = 1
-ResizeButton.Image = "rbxassetid://6031094038"
-ResizeButton.ImageColor3 = Color3.fromRGB(200, 200, 200)
-ResizeButton.ZIndex = 5
-ResizeButton.Parent = MainFrame
-
-local isResizing, startSize, startMousePos = false, nil, nil
-
-ResizeButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        isResizing = true
-        startSize = MainFrame.Size
-        startMousePos = UserInputService:GetMouseLocation()
-    end
+Tb.MouseButton1Click:Connect(function()
+    en = not en
+    if en then Tb.BackgroundColor3,Tb.Text,L1.Text,L1.TextColor3,con = Color3.fromRGB(40,140,110),"ON","Status: ON",Color3.fromRGB(130,255,200),R.RenderStepped:Connect(prot)
+    else Tb.BackgroundColor3,Tb.Text,L1.Text,L1.TextColor3 = Color3.fromRGB(160,60,60),"OFF","Status: OFF",Color3.fromRGB(255,130,130) if con then con:Disconnect() con = nil end end
 end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if isResizing and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = UserInputService:GetMouseLocation() - startMousePos
-        if not isMinimized then
-            MainFrame.Size = UDim2.new(0, math.max(240, startSize.X.Offset + delta.X), 0, math.max(160, startSize.Y.Offset + delta.Y))
-        end
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then isResizing = false end
-end)
-
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(1, 0, 0, 30)
-StatusLabel.Position = UDim2.new(0, 0, 0, 20)
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Text = "Status: OFF"
-StatusLabel.TextColor3 = Color3.fromRGB(255, 130, 130)
-StatusLabel.TextSize = 15
-StatusLabel.Font = Enum.Font.SourceSans
-StatusLabel.Parent = Tab1_Shield
-
-local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 80, 0, 30)
-ToggleButton.Position = UDim2.new(0.5, -40, 0, 60)
-ToggleButton.BackgroundColor3 = Color3.fromRGB(160, 60, 60)
-ToggleButton.Text = "OFF"
-ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleButton.TextSize = 14
-ToggleButton.Font = Enum.Font.SourceSansBold
-ToggleButton.Parent = Tab1_Shield
-
-local ToggleCorner = Instance.new("UICorner")
-ToggleCorner.CornerRadius = UDim.new(0, 6)
-ToggleCorner.Parent = ToggleButton
-
-local function runProtection()
-    local character = localPlayer.Character
-    if not character then return end
-    local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if rootPart and rootPart.Anchored then rootPart.Anchored = false end
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if humanoid and humanoid.SeatPart then humanoid.Jump = true end
-    for _, part in pairs(character:GetChildren()) do
-        if part:IsA("BasePart") then
-            for _, object in pairs(part:GetChildren()) do
-                if object:IsA("Weld") or object:IsA("ManualWeld") or object:IsA("WeldConstraint") then
-                    if object.Name ~= "RightGrip" and object.Name ~= "LeftGrip" then object:Destroy() end
-                elseif object:IsA("BodyPosition") or object:IsA("BodyGyro") or object:IsA("RocketPropulsion") then
-                    object:Destroy()
-                end
-            end
-        end
-    end
+local Sl = Instance.new("ScrollingFrame",T2) Sl.Size = UDim2.new(1,-10,1,-85) Sl.Position = UDim2.new(0,5,0,10) Sl.BackgroundTransparency = 0.5 Sl.BackgroundColor3 = Color3.fromRGB(10,45,60) Sl.BorderSizePixel = 0 Sl.CanvasSize = UDim2.new(0,0,0,0) Sl.ScrollBarThickness = 4 Instance.new("UIListLayout",Sl).Padding = UDim.new(0,4)
+local L2 = Instance.new("TextLabel",T2) L2.Size = UDim2.new(1,0,0,20) L2.Position = UDim2.new(0,0,1,-70) L2.BackgroundTransparency = 1 L2.Text = "Target: NONE" L2.TextColor3 = Color3.fromRGB(255,130,130) L2.TextSize = 13 L2.Font = 4
+local function sSg() if not sel then return end local h = pl.Backpack:FindFirstChild("Handcuffs") or pl.Character:FindFirstChild("Handcuffs") if h then local r = h:FindFirstChild("RemoteEvent") local t = sel.Character and sel.Character:FindFirstChild("Head") if r and t then r:FireServer("Cuff",t) end end end
+local function cB(t,sz,p,f)
+    local b = Instance.new("TextButton",T2) b.Size = sz b.Position = p b.BackgroundColor3 = Color3.fromRGB(35,95,120) b.Text = t b.TextColor3 = Color3.fromRGB(255,255,255) b.TextSize = 12 b.Font = 4 Instance.new("UICorner",b).CornerRadius = UDim.new(0,4)
+    b.MouseButton1Click:Connect(f) return b
 end
-
-ToggleButton.MouseButton1Click:Connect(function()
-    protectionEnabled = not protectionEnabled
-    if protectionEnabled then
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(40, 140, 110)
-        ToggleButton.Text = "ON"
-        StatusLabel.Text = "Status: ON"
-        StatusLabel.TextColor3 = Color3.fromRGB(130, 255, 200)
-        protectionConnection = RunService.RenderStepped:Connect(runProtection)
-    else
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(160, 60, 60)
-        ToggleButton.Text = "OFF"
-        StatusLabel.Text = "Status: OFF"
-        StatusLabel.TextColor3 = Color3.fromRGB(255, 130, 130)
-        if protectionConnection then protectionConnection:Disconnect() protectionConnection = nil end
-    end
+local Cb = cB("Capture",UDim2.new(0.33,-4,0,30),UDim2.new(0,2,1,-45),sSg)
+local Rb = cB("Release",UDim2.new(0.33,-4,0,30),UDim2.new(0.33,2,1,-45),function() sSg() task.wait(0.01) sSg() end) Rb.BackgroundColor3 = Color3.fromRGB(40,70,90)
+local Ub = cB("Unrecon",UDim2.new(0.33,-4,0,30),UDim2.new(0.66,2,1,-45),function() sel = nil L2.Text,L2.TextColor3 = "Target: NONE",Color3.fromRGB(255,130,130) if pl.Character and pl.Character:FindFirstChildOfClass("Humanoid") then cam.CameraSubject = pl.Character:FindFirstChildOfClass("Humanoid") end end) Ub.BackgroundColor3 = Color3.fromRGB(30,60,80)
+local function spy(t) if t and t.Character and t.Character:FindFirstChildOfClass("Humanoid") then cam.CameraSubject = t.Character:FindFirstChildOfClass("Humanoid") end end
+local function upL()
+    for _,c in pairs(Sl:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end local c = 0
+    for _,p in pairs(P:GetPlayers()) do if p ~= pl then c = c + 1
+        local b = Instance.new("TextButton",Sl) b.Size = UDim2.new(1,-5,0,22) b.BackgroundColor3 = Color3.fromRGB(30,75,95) b.Text = p.Name b.TextColor3 = Color3.fromRGB(255,255,255) b.TextSize = 12 b.Font = 3 Instance.new("UICorner",b).CornerRadius = UDim.new(0,4)
+        b.MouseButton1Click:Connect(function() sel = p L2.Text,L2.TextColor3 = "Target: "..p.Name,Color3.fromRGB(255,255,255) spy(p) end)
+    end end Sl.CanvasSize = UDim2.new(0,0,0,c*26)
+end
+R.RenderStepped:Connect(function() if sel and cam.CameraSubject ~= (sel.Character and sel.Character:FindFirstChildOfClass("Humanoid")) and T2.Visible then spy(sel) end end)
+P.PlayerAdded:Connect(upL) P.PlayerRemoving:Connect(upL) upL()
+B.MouseButton1Click:Connect(function()
+    min = not min
+    if min then F.Visible,S.Visible,Rz.Visible = false,false,false M.Size = UDim2.new(0,260,0,30) B.Text = "+"
+    else F.Visible,S.Visible,Rz.Visible = true,true,true M.Size = UDim2.new(0,260,0,180) B.Text = "-" end
 end)
-
-local ScrollList = Instance.new("ScrollingFrame")
-ScrollList.Size = UDim2.new(1, -10, 1, -85)
-ScrollList.Position = UDim2.new(0, 5, 0, 10)
-ScrollList.BackgroundTransparency = 0.5
-ScrollList.BackgroundColor3 = Color3.fromRGB(10, 45, 60)
-ScrollList.BorderSizePixel = 0
-ScrollList.CanvasSize = UDim2.new(0, 0, 0, 0)
-ScrollList.ScrollBarThickness = 4
-ScrollList.Parent = Tab2_Combat
-
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Padding = UDim.new(0, 4)
-UIListLayout.Parent = ScrollList
-
-local TargetLabelUK = Instance.new("TextLabel")
-TargetLabelUK.Size = UDim2.new(1, 0, 0, 20)
-TargetLabelUK.Position = UDim2.new(0, 0, 1, -70)
-TargetLabelUK.BackgroundTransparency = 1
-TargetLabelUK.Text = "Target: NONE"
-TargetLabelUK.TextColor3 = Color3.fromRGB(255, 130, 130)
-TargetLabelUK.TextSize = 13
-TargetLabelUK.Font = Enum.Font.SourceSansBold
-TargetLabelUK.Parent = Tab2_Combat
-
-local CaptureButton = Instance.new("TextButton")
-CaptureButton.Size = UDim2.new(0.33, -4, 0, 30)
-CaptureButton.Position = UDim2.new(0, 2, 1, -45)
-CaptureButton.BackgroundColor3 = Color3.fromRGB(35, 95, 120)
-CaptureButton.Text = "Capture"
-CaptureButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CaptureButton.TextSize = 12
-CaptureButton.Font = Enum.Font.SourceSansBold
-CaptureButton.Parent = Tab2_Combat
-
-local CapCorner = Instance.new("UICorner")
-CapCorner.CornerRadius = UDim.new(0, 4)
-CapCorner.Parent = CaptureButton
-
-local ReleaseButton = Instance.new("TextButton")
-ReleaseButton.Size = UDim2.new(0.33, -4, 0, 30)
-ReleaseButton.Position = UDim2.new(0.33, 2, 1, -45)
-ReleaseButton.BackgroundColor3 = Color3.fromRGB(40, 70, 90)
-ReleaseButton.Text = "Release"
-ReleaseButton.TextColor3 = Color3.fromRGB(200, 230, 255)
-ReleaseButton.TextSize = 12
-ReleaseButton.Font = Enum.Font.SourceSans
-ReleaseButton.Parent = Tab2_Combat
-
-local RelCorner = Instance.new("UICorner")
-RelCorner.CornerRadius = UDim.new(0, 4)
-RelCorner.Parent = ReleaseButton
-
-local UnspyButton = Instance.new("TextButton")
-UnspyButton.Size = UDim2.new(0.33, -4, 0, 30)
-UnspyButton.Position = UDim2.new(0.66, 2, 1, -45)
-UnspyButton.BackgroundColor3 = Color3.fromRGB(30, 60, 80)
-UnspyButton.Text = "Unrecon"
-UnspyButton.TextColor3 = Color3.fromRGB(200, 230, 255)
-UnspyButton.TextSize = 11
-UnspyButton.Font = Enum.Font.SourceSans
-UnspyButton.Parent = Tab2_Combat
-
-local UnspyCorner = Instance.new("UICorner")
-UnspyCorner.CornerRadius = UDim.new(0, 4)
-UnspyCorner.Parent = UnspyButton
-
-local function spyOn(targetPlayer)
-    if targetPlayer and targetPlayer.Character then
-        local targetHumanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
-if targetHumanoid then Camera.CameraSubject = targetHumanoid endendendlocal function updatePlayerList()for _, child in pairs(ScrollList:GetChildren()) do if child:IsA("TextButton") then child:Destroy() end endlocal count = 0for _, p in pairs(Players:GetPlayers()) doif p ~= localPlayer thencount = count + 1local PButton = Instance.new("TextButton")PButton.Size = UDim2.new(1, -5, 0, 22)PButton.BackgroundColor3 = Color3.fromRGB(30, 75, 95)PButton.Text = p.NamePButton.TextColor3 = Color3.fromRGB(255, 255, 255)PButton.TextSize = 12PButton.Font = Enum.Font.SourceSansPButton.Parent = ScrollListInstance.new("UICorner", PButton).CornerRadius = UDim.new(0, 4)PButton.MouseButton1Click:Connect(function()selectedPlayer = pTargetLabelUK.Text = "Target: " .. p.NameTargetLabelUK.TextColor3 = Color3.fromRGB(255, 255, 255)spyOn(p)end)endendScrollList.CanvasSize = UDim2.new(0, 0, 0, count * 26)endRunService.RenderStepped:Connect(function()if selectedPlayer and Camera.CameraSubject ~= (selectedPlayer.Character and selectedPlayer.Character:FindFirstChildOfClass("Humanoid")) thenif Tab2_Combat.Visible then spyOn(selectedPlayer) endendend)UnspyButton.MouseButton1Click:Connect(function()selectedPlayer = nilTargetLabelUK.Text = "Target: NONE"TargetLabelUK.TextColor3 = Color3.fromRGB(255, 130, 130)if localPlayer.Character thenlocal myHumanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")if myHumanoid then Camera.CameraSubject = myHumanoid endendend)Players.PlayerAdded:Connect(updatePlayerList)Players.PlayerRemoving:Connect(updatePlayerList)updatePlayerList()local function sendCuffSignal()if not selectedPlayer then return endlocal handcuffs = localPlayer.Backpack:FindFirstChild("Handcuffs") or localPlayer.Character:FindFirstChild("Handcuffs")if handcuffs thenlocal remote = handcuffs:FindFirstChild("RemoteEvent")local targetHead = selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("Head")if remote and targetHead then remote:FireServer("Cuff", targetHead) endendendCaptureButton.MouseButton1Click:Connect(sendCuffSignal)ReleaseButton.MouseButton1Click:Connect(function()sendCuffSignal()task.wait(0.01)sendCuffSignal()end)MinimizeButton.MouseButton1Click:Connect(function()isMinimized = not isMinimizedif isMinimized thenContentFrame.Visible, SideMenu.Visible, ResizeButton.Visible = false, false, falseMainFrame.Size = UDim2.new(0, 260, 0, 30)MinimizeButton.Text = "+"elseContentFrame.Visible, SideMenu.Visible, ResizeButton.Visible = true, true, trueMainFrame.Size = UDim2.new(0, 260, 0, 180)MinimizeButton.Text = "-"endend)
