@@ -67,7 +67,7 @@ SideMenu.BackgroundTransparency = 1
 SideMenu.Parent = MainFrame
 
 local UIListSide = Instance.new("UIListLayout")
-UIListSide.Padding = UDim.new(0, 2)
+UIListSide.Padding = UDim.new(0, 0)
 UIListSide.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListSide.Parent = SideMenu
 
@@ -103,17 +103,16 @@ end
 
 local function createMenuButton(text, parent, tabTarget)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -4, 0, 32)
+    btn.Size = UDim2.new(1, 0, 0, 35)
     btn.BackgroundColor3 = Color3.fromRGB(25, 85, 105)
     btn.BackgroundTransparency = 0.2
+    btn.BorderSizePixel = 0
     btn.Text = text
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.TextSize = 13
     btn.Font = Enum.Font.SourceSansBold
     btn.Parent = parent
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 4)
-    c.Parent = btn
+    
     btn.MouseButton1Click:Connect(function()
         showTab(tabTarget)
     end)
@@ -124,11 +123,12 @@ createMenuButton("Recon", SideMenu, Tab2_Recon)
 createMenuButton("UltraKill", SideMenu, Tab3_UK)
 
 local ResizeButton = Instance.new("ImageButton")
-ResizeButton.Size = UDim2.new(0, 12, 0, 12)
-ResizeButton.Position = UDim2.new(1, -12, 1, -12)
+ResizeButton.Size = UDim2.new(0, 16, 0, 16)
+ResizeButton.Position = UDim2.new(1, -16, 1, -16)
 ResizeButton.BackgroundTransparency = 1
 ResizeButton.Image = "rbxassetid://6031094038"
 ResizeButton.ImageColor3 = Color3.fromRGB(200, 200, 200)
+ResizeButton.ZIndex = 5
 ResizeButton.Parent = MainFrame
 
 local isResizing = false
@@ -146,8 +146,8 @@ UserInputService.InputChanged:Connect(function(input)
     if isResizing and input.UserInputType == Enum.UserInputType.MouseMovement then
         local currMousePos = UserInputService:GetMouseLocation()
         local delta = currMousePos - startMousePos
-        local newWidth = math.max(220, startSize.X.Offset + delta.X)
-        local newHeight = math.max(150, startSize.Y.Offset + delta.Y)
+        local newWidth = math.max(240, startSize.X.Offset + delta.X)
+        local newHeight = math.max(160, startSize.Y.Offset + delta.Y)
         if not isMinimized then
             MainFrame.Size = UDim2.new(0, newWidth, 0, newHeight)
         end
@@ -160,7 +160,6 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- SHIELD TAB
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, 0, 0, 30)
 StatusLabel.Position = UDim2.new(0, 0, 0, 20)
@@ -277,3 +276,6 @@ TargetLabelUK.TextSize = 13
 TargetLabelUK.Font = Enum.Font.SourceSansBold
 TargetLabelUK.Parent = Tab3_UK
 
+local CaptureButton = Instance.new("TextButton")
+CaptureButton.Size = UDim2.new(0.5, -4, 0, 30)
+CaptureButton.Position = UDim2.new(0, 2, 1, -45)
