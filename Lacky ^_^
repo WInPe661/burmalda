@@ -11,13 +11,14 @@ local L = Instance.new("UIListLayout",S) L.HorizontalAlignment = 1
 local F = Instance.new("Frame",M) F.Size = UDim2.new(1,-80,1,-30) F.Position = UDim2.new(0,80,0,30) F.BackgroundTransparency = 1
 local T1,T2,T3 = Instance.new("Frame",F),Instance.new("Frame",F),Instance.new("Frame",F) T1.Size,T2.Size,T3.Size = UDim2.new(1,0,1,0),UDim2.new(1,0,1,0),UDim2.new(1,0,1,0) T1.BackgroundTransparency,T2.BackgroundTransparency,T3.BackgroundTransparency = 1,1,1 T2.Visible,T3.Visible = false,false
 
+local activeSpy = nil
+
 local function mB(text, targetTab)
     local b = Instance.new("TextButton",S) b.Size = UDim2.new(1,0,0,35) b.BackgroundColor3 = Color3.fromRGB(25,85,105) b.BackgroundTransparency = 0.2 b.BorderSizePixel = 0 b.Text = text b.TextColor3 = Color3.fromRGB(255,255,255) b.TextSize = 13 b.Font = 4
     b.MouseButton1Click:Connect(function() T1.Visible,T2.Visible,T3.Visible = false,false,false targetTab.Visible = true end)
 end
 mB("Shield",T1) mB("Recon",T2) mB("UltraKill",T3)
 
--- СИСТЕМА МАСШТАБИРОВАНИЯ ПО ВСЕМ КРАЯМ ОКНА
 local rzEdge, sSz, sPs, sMp = nil, nil, nil, nil
 local function cEz(n, sz, ps)
     local e = Instance.new("TextButton", M) e.Name = n e.Size = sz e.Position = ps e.BackgroundTransparency = 1 e.Text = "" e.ZIndex = 10
@@ -63,7 +64,7 @@ end
 local Sl2,Sl3 = cSl(T2,-45), cSl(T3,-85)
 
 local Ub = Instance.new("TextButton",T2) Ub.Size = UDim2.new(1,-10,0,25) Ub.Position = UDim2.new(0,5,1,-30) Ub.BackgroundColor3 = Color3.fromRGB(30,60,80) Ub.Text = "Unrecon" Ub.TextColor3 = Color3.fromRGB(200,230,255) Ub.TextSize = 12 Ub.Font = 4 Instance.new("UICorner",Ub).CornerRadius = UDim.new(0,4)
-Ub.MouseButton1Click:Connect(function() if pl.Character and pl.Character:FindFirstChildOfClass("Humanoid") then cam.CameraSubject = pl.Character:FindFirstChildOfClass("Humanoid") end end)
+Ub.MouseButton1Click:Connect(function() activeSpy = nil if pl.Character and pl.Character:FindFirstChildOfClass("Humanoid") then cam.CameraSubject = pl.Character:FindFirstChildOfClass("Humanoid") end end)
 
 local L3 = Instance.new("TextLabel",T3) L3.Size = UDim2.new(1,0,0,20) L3.Position = UDim2.new(0,0,1,-70) L3.BackgroundTransparency = 1 L3.Text = "Target: NONE" L3.TextColor3 = Color3.fromRGB(255,130,130) L3.TextSize = 13 L3.Font = 4
 
@@ -83,7 +84,7 @@ local function upL()
     local count = 0
     for _,p in pairs(P:GetPlayers()) do if p ~= pl then count = count + 1
         local b2 = Instance.new("TextButton",Sl2) b2.Size = UDim2.new(1,-5,0,22) b2.BackgroundColor3 = Color3.fromRGB(30,75,95) b2.Text = p.Name b2.TextColor3 = Color3.fromRGB(255,255,255) b2.TextSize = 12 b2.Font = 3 Instance.new("UICorner",b2).CornerRadius = UDim.new(0,4)
-        b2.MouseButton1Click:Connect(function() spy(p) end)
+        b2.MouseButton1Click:Connect(function() activeSpy = p spy(p) end)
         
         local b3 = Instance.new("TextButton",Sl3) b3.Size = UDim2.new(1,-5,0,22) b3.BackgroundColor3 = Color3.fromRGB(30,75,95) b3.Text = p.Name b3.TextColor3 = Color3.fromRGB(255,255,255) b3.TextSize = 12 b3.Font = 3 Instance.new("UICorner",b3).CornerRadius = UDim.new(0,4)
         b3.MouseButton1Click:Connect(function() sel = p L3.Text,L3.TextColor3 = "Target: "..p.Name,Color3.fromRGB(255,255,255) end)
@@ -91,7 +92,11 @@ local function upL()
     Sl2.CanvasSize = UDim2.new(0,0,0,count*26) Sl3.CanvasSize = UDim2.new(0,0,0,count*26)
 end
 
-R.RenderStepped:Connect(function() if cam.CameraSubject ~= pl.Character:FindFirstChildOfClass("Humanoid") and not T2.Visible and not sel then cam.CameraSubject = pl.Character:FindFirstChildOfClass("Humanoid") end end)
+R.RenderStepped:Connect(function() 
+    if activeSpy and cam.CameraSubject ~= (activeSpy.Character and activeSpy.Character:FindFirstChildOfClass("Humanoid")) then 
+        spy(activeSpy) 
+    end 
+end)
 P.PlayerAdded:Connect(upL) P.PlayerRemoving:Connect(upL) upL()
 
 B.MouseButton1Click:Connect(function()
