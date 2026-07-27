@@ -7,7 +7,6 @@ local Camera = workspace.CurrentCamera
 local protectionEnabled = false
 local protectionConnection = nil
 local isMinimized = false
-local isSpyOpen = false
 local selectedPlayer = nil
 
 if CoreGui:FindFirstChild("LackyAntiCuff") then
@@ -21,7 +20,7 @@ ScreenGui.Parent = CoreGui
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 220, 0, 150)
+MainFrame.Size = UDim2.new(0, 240, 0, 180)
 MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 65, 85)
 MainFrame.BackgroundTransparency = 0.25
@@ -38,7 +37,7 @@ local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Size = UDim2.new(1, -40, 0, 30)
 TitleLabel.Position = UDim2.new(0, 10, 0, 0)
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "Lacky ^_^"
+TitleLabel.Text = "Lacky ^_"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 16
 TitleLabel.Font = Enum.Font.SourceSansBold
@@ -60,189 +59,105 @@ local ButtonCorner = Instance.new("UICorner")
 ButtonCorner.CornerRadius = UDim.new(0, 4)
 ButtonCorner.Parent = MinimizeButton
 
+local SideMenu = Instance.new("Frame")
+SideMenu.Size = UDim2.new(0, 70, 1, -30)
+SideMenu.Position = UDim2.new(0, 0, 0, 30)
+SideMenu.BackgroundTransparency = 1
+SideMenu.Parent = MainFrame
+
+local UIListSide = Instance.new("UIListLayout")
+UIListSide.Padding = UDim.new(0, 4)
+UIListSide.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListSide.Parent = SideMenu
+
 local ContentFrame = Instance.new("Frame")
-ContentFrame.Size = UDim2.new(1, 0, 1, -30)
-ContentFrame.Position = UDim2.new(0, 0, 0, 30)
+ContentFrame.Size = UDim2.new(1, -70, 1, -30)
+ContentFrame.Position = UDim2.new(0, 70, 0, 30)
 ContentFrame.BackgroundTransparency = 1
 ContentFrame.Parent = MainFrame
 
+local Tab1_Shield = Instance.new("Frame")
+Tab1_Shield.Size = UDim2.new(1, 0, 1, 0)
+Tab1_Shield.BackgroundTransparency = 1
+Tab1_Shield.Parent = ContentFrame
+
+local Tab2_Recon = Instance.new("Frame")
+Tab2_Recon.Size = UDim2.new(1, 0, 1, 0)
+Tab2_Recon.BackgroundTransparency = 1
+Tab2_Recon.Visible = false
+Tab2_Recon.Parent = ContentFrame
+
+local Tab3_UK = Instance.new("Frame")
+Tab3_UK.Size = UDim2.new(1, 0, 1, 0)
+Tab3_UK.BackgroundTransparency = 1
+Tab3_UK.Visible = false
+Tab3_UK.Parent = ContentFrame
+
+local function showTab(tabToOpen)
+    Tab1_Shield.Visible = false
+    Tab2_Recon.Visible = false
+    Tab3_UK.Visible = false
+    tabToOpen.Visible = true
+end
+
+local function createMenuButton(text, parent, tabTarget)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 65, 0, 28)
+    btn.BackgroundColor3 = Color3.fromRGB(25, 85, 105)
+    btn.BackgroundTransparency = 0.2
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 12
+    btn.Font = Enum.Font.SourceSansBold
+    btn.Parent = parent
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 4)
+    c.Parent = btn
+    btn.MouseButton1Click:Connect(function()
+        showTab(tabTarget)
+    end)
+end
+
+createMenuButton("Shield", SideMenu, Tab1_Shield)
+createMenuButton("Recon", SideMenu, Tab2_Recon)
+createMenuButton("UltraKill", SideMenu, Tab3_UK)
+
 local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(0, 100, 0, 30)
-StatusLabel.Position = UDim2.new(0, 15, 0, 10)
+StatusLabel.Size = UDim2.new(1, 0, 0, 30)
+StatusLabel.Position = UDim2.new(0, 0, 0, 20)
 StatusLabel.BackgroundTransparency = 1
 StatusLabel.Text = "Status: OFF"
 StatusLabel.TextColor3 = Color3.fromRGB(255, 130, 130)
 StatusLabel.TextSize = 15
 StatusLabel.Font = Enum.Font.SourceSans
-StatusLabel.TextXAlignment = Enum.TextXAlignment.Left
-StatusLabel.Parent = ContentFrame
+StatusLabel.Parent = Tab1_Shield
 
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 70, 0, 30)
-ToggleButton.Position = UDim2.new(1, -85, 0, 10)
+ToggleButton.Size = UDim2.new(0, 80, 0, 30)
+ToggleButton.Position = UDim2.new(0.5, -40, 0, 60)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(160, 60, 60)
 ToggleButton.Text = "OFF"
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.TextSize = 14
 ToggleButton.Font = Enum.Font.SourceSansBold
-ToggleButton.Parent = ContentFrame
+ToggleButton.Parent = Tab1_Shield
 
 local ToggleCorner = Instance.new("UICorner")
 ToggleCorner.CornerRadius = UDim.new(0, 6)
 ToggleCorner.Parent = ToggleButton
 
-local SpyMenuButton = Instance.new("TextButton")
-SpyMenuButton.Size = UDim2.new(1, -30, 0, 30)
-SpyMenuButton.Position = UDim2.new(0, 15, 0, 50)
-SpyMenuButton.BackgroundColor3 = Color3.fromRGB(25, 95, 120)
-SpyMenuButton.BackgroundTransparency = 0.2
-SpyMenuButton.Text = "Open Recon"
-SpyMenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-SpyMenuButton.TextSize = 14
-SpyMenuButton.Font = Enum.Font.SourceSansBold
-SpyMenuButton.Parent = ContentFrame
-
-local SpyBtnCorner = Instance.new("UICorner")
-SpyBtnCorner.CornerRadius = UDim.new(0, 6)
-SpyBtnCorner.Parent = SpyMenuButton
-
-local UnspyButton = Instance.new("TextButton")
-UnspyButton.Size = UDim2.new(1, -30, 0, 30)
-UnspyButton.Position = UDim2.new(0, 15, 0, 85)
-UnspyButton.BackgroundColor3 = Color3.fromRGB(40, 70, 90)
-UnspyButton.Text = "Unrecon"
-UnspyButton.TextColor3 = Color3.fromRGB(200, 230, 255)
-UnspyButton.TextSize = 13
-UnspyButton.Font = Enum.Font.SourceSans
-UnspyButton.Parent = ContentFrame
-
-local UnspyCorner = Instance.new("UICorner")
-UnspyCorner.CornerRadius = UDim.new(0, 6)
-UnspyCorner.Parent = UnspyButton
-
-local SpyFrame = Instance.new("Frame")
-SpyFrame.Name = "SpyFrame"
-SpyFrame.Size = UDim2.new(0, 180, 0, 200)
-SpyFrame.Position = UDim2.new(1, 10, 0, 0)
-SpyFrame.BackgroundColor3 = Color3.fromRGB(15, 55, 75)
-SpyFrame.BackgroundTransparency = 0.3
-SpyFrame.BorderSizePixel = 0
-SpyFrame.Visible = false
-SpyFrame.Parent = MainFrame
-
-local SpyCorner = Instance.new("UICorner")
-SpyCorner.CornerRadius = UDim.new(0, 8)
-SpyCorner.Parent = SpyFrame
-
-local ScrollList = Instance.new("ScrollingFrame")
-ScrollList.Size = UDim2.new(1, -10, 1, -10)
-ScrollList.Position = UDim2.new(0, 5, 0, 5)
-ScrollList.BackgroundTransparency = 1
-ScrollList.BorderSizePixel = 0
-ScrollList.CanvasSize = UDim2.new(0, 0, 0, 0)
-ScrollList.ScrollBarThickness = 4
-ScrollList.Parent = SpyFrame
-
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Padding = UDim.new(0, 4)
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Parent = ScrollList
-
-local function spyOn(targetPlayer)
-    if targetPlayer and targetPlayer.Character then
-        local targetHumanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if targetHumanoid then
-            Camera.CameraSubject = targetHumanoid
-        end
-    end
-end
-
-local function updatePlayerList()
-    for _, child in pairs(ScrollList:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-    
-    local count = 0
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= localPlayer then
-            count = count + 1
-            local PButton = Instance.new("TextButton")
-            PButton.Size = UDim2.new(1, -5, 0, 25)
-            PButton.BackgroundColor3 = Color3.fromRGB(30, 75, 95)
-            PButton.BackgroundTransparency = 0.2
-            PButton.Text = p.Name
-            PButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            PButton.TextSize = 13
-            PButton.Font = Enum.Font.SourceSans
-            PButton.Parent = ScrollList
-            
-            local PCorner = Instance.new("UICorner")
-            PCorner.CornerRadius = UDim.new(0, 4)
-            PCorner.Parent = PButton
-            
-            PButton.MouseButton1Click:Connect(function()
-                selectedPlayer = p
-                spyOn(p)
-            end)
-        end
-    end
-    ScrollList.CanvasSize = UDim2.new(0, 0, 0, count * 29)
-end
-
-RunService.RenderStepped:Connect(function()
-    if selectedPlayer and Camera.CameraSubject ~= (selectedPlayer.Character and selectedPlayer.Character:FindFirstChildOfClass("Humanoid")) then
-        spyOn(selectedPlayer)
-    end
-end)
-
-UnspyButton.MouseButton1Click:Connect(function()
-    selectedPlayer = nil
-    if localPlayer.Character then
-        local myHumanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if myHumanoid then
-            Camera.CameraSubject = myHumanoid
-        end
-    end
-end)
-
-SpyMenuButton.MouseButton1Click:Connect(function()
-    isSpyOpen = not isSpyOpen
-    if isSpyOpen then
-        updatePlayerList()
-        SpyFrame.Visible = true
-        SpyMenuButton.Text = "Close Recon"
-    else
-        SpyFrame.Visible = false
-        SpyMenuButton.Text = "Open Recon"
-    end
-end)
-
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
-
 local function runProtection()
     local character = localPlayer.Character
     if not character then return end
-    
     local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if rootPart and rootPart.Anchored then
-        rootPart.Anchored = false
-    end
-    
+    if rootPart and rootPart.Anchored then rootPart.Anchored = false end
     local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if humanoid and humanoid.SeatPart then
-        humanoid.Jump = true
-    end
-    
+    if humanoid and humanoid.SeatPart then humanoid.Jump = true end
     for _, part in pairs(character:GetChildren()) do
         if part:IsA("BasePart") then
             for _, object in pairs(part:GetChildren()) do
                 if object:IsA("Weld") or object:IsA("ManualWeld") or object:IsA("WeldConstraint") then
-                    if object.Name ~= "RightGrip" and object.Name ~= "LeftGrip" then
-                        object:Destroy()
-                    end
+                    if object.Name ~= "RightGrip" and object.Name ~= "LeftGrip" then object:Destroy() end
                 elseif object:IsA("BodyPosition") or object:IsA("BodyGyro") or object:IsA("RocketPropulsion") then
                     object:Destroy()
                 end
@@ -271,17 +186,95 @@ ToggleButton.MouseButton1Click:Connect(function()
     end
 end)
 
-MinimizeButton.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    if isMinimized then
-        ContentFrame.Visible = false
-        SpyFrame.Visible = false
-        MainFrame.Size = UDim2.new(0, 220, 0, 30)
-        MinimizeButton.Text = "+"
-    else
-        ContentFrame.Visible = true
-        if isSpyOpen then SpyFrame.Visible = true end
-        MainFrame.Size = UDim2.new(0, 220, 0, 150)
-        MinimizeButton.Text = "-"
+local ScrollList = Instance.new("ScrollingFrame")
+ScrollList.Size = UDim2.new(1, -10, 0, 100)
+ScrollList.Position = UDim2.new(0, 5, 0, 10)
+ScrollList.BackgroundTransparency = 0.5
+ScrollList.BackgroundColor3 = Color3.fromRGB(10, 45, 60)
+ScrollList.BorderSizePixel = 0
+ScrollList.CanvasSize = UDim2.new(0, 0, 0, 0)
+ScrollList.ScrollBarThickness = 4
+ScrollList.Parent = Tab2_Recon
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Padding = UDim.new(0, 4)
+UIListLayout.Parent = ScrollList
+
+local UnspyButton = Instance.new("TextButton")
+UnspyButton.Size = UDim2.new(1, -10, 0, 25)
+UnspyButton.Position = UDim2.new(0, 5, 0, 115)
+UnspyButton.BackgroundColor3 = Color3.fromRGB(40, 70, 90)
+UnspyButton.Text = "Unrecon"
+UnspyButton.TextColor3 = Color3.fromRGB(200, 230, 255)
+UnspyButton.TextSize = 12
+UnspyButton.Font = Enum.Font.SourceSans
+UnspyButton.Parent = Tab2_Recon
+
+local UnspyCorner = Instance.new("UICorner")
+UnspyCorner.CornerRadius = UDim.new(0, 4)
+UnspyCorner.Parent = UnspyButton
+
+local TargetLabelUK = Instance.new("TextLabel")
+
+local function spyOn(targetPlayer)
+    if targetPlayer and targetPlayer.Character then
+        local targetHumanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if targetHumanoid then
+            Camera.CameraSubject = targetHumanoid
+        end
+    end
+end
+
+local function updatePlayerList()
+    for _, child in pairs(ScrollList:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local count = 0
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= localPlayer then
+            count = count + 1
+            local PButton = Instance.new("TextButton")
+            PButton.Size = UDim2.new(1, -5, 0, 22)
+            PButton.BackgroundColor3 = Color3.fromRGB(30, 75, 95)
+            PButton.Text = p.Name
+            PButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            PButton.TextSize = 12
+            PButton.Font = Enum.Font.SourceSans
+            PButton.Parent = ScrollList
+            local pc = Instance.new("UICorner")
+            pc.CornerRadius = UDim.new(0, 4)
+            pc.Parent = PButton
+            
+            PButton.MouseButton1Click:Connect(function()
+                selectedPlayer = p
+                TargetLabelUK.Text = "Target: " .. p.Name
+                TargetLabelUK.TextColor3 = Color3.fromRGB(255, 255, 255)
+                spyOn(p)
+            end)
+        end
+    end
+    ScrollList.CanvasSize = UDim2.new(0, 0, 0, count * 26)
+end
+
+RunService.RenderStepped:Connect(function()
+    if selectedPlayer and Camera.CameraSubject ~= (selectedPlayer.Character and selectedPlayer.Character:FindFirstChildOfClass("Humanoid")) then
+        spyOn(selectedPlayer)
     end
 end)
+
+UnspyButton.MouseButton1Click:Connect(function()
+    selectedPlayer = nil
+    TargetLabelUK.Text = "Target: NONE"
+    TargetLabelUK.TextColor3 = Color3.fromRGB(255, 130, 130)
+    if localPlayer.Character then
+        local myHumanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if myHumanoid then Camera.CameraSubject = myHumanoid end
+    end
+end)
+
+Players.PlayerAdded:Connect(updatePlayerList)
+Players.PlayerRemoving:Connect(updatePlayerList)
+RunService.Stepped:Connect(function() if Tab2_Recon.Visible and #ScrollList:GetChildren() <= 1 then updatePlayerList() end end)
+
+TargetLabelUK.Size = UDim2.new(1, 0, 0, 30)
+TargetLabelUK.Position = UDim2.new(0, 0, 0, 15)
