@@ -1,6 +1,7 @@
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
 local localPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
@@ -20,7 +21,7 @@ ScreenGui.Parent = CoreGui
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 240, 0, 180)
+MainFrame.Size = UDim2.new(0, 260, 0, 180)
 MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 65, 85)
 MainFrame.BackgroundTransparency = 0.25
@@ -60,19 +61,19 @@ ButtonCorner.CornerRadius = UDim.new(0, 4)
 ButtonCorner.Parent = MinimizeButton
 
 local SideMenu = Instance.new("Frame")
-SideMenu.Size = UDim2.new(0, 70, 1, -30)
+SideMenu.Size = UDim2.new(0, 80, 1, -30)
 SideMenu.Position = UDim2.new(0, 0, 0, 30)
 SideMenu.BackgroundTransparency = 1
 SideMenu.Parent = MainFrame
 
 local UIListSide = Instance.new("UIListLayout")
-UIListSide.Padding = UDim.new(0, 4)
+UIListSide.Padding = UDim.new(0, 2)
 UIListSide.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListSide.Parent = SideMenu
 
 local ContentFrame = Instance.new("Frame")
-ContentFrame.Size = UDim2.new(1, -70, 1, -30)
-ContentFrame.Position = UDim2.new(0, 70, 0, 30)
+ContentFrame.Size = UDim2.new(1, -80, 1, -30)
+ContentFrame.Position = UDim2.new(0, 80, 0, 30)
 ContentFrame.BackgroundTransparency = 1
 ContentFrame.Parent = MainFrame
 
@@ -102,12 +103,12 @@ end
 
 local function createMenuButton(text, parent, tabTarget)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 65, 0, 28)
+    btn.Size = UDim2.new(1, -4, 0, 32)
     btn.BackgroundColor3 = Color3.fromRGB(25, 85, 105)
     btn.BackgroundTransparency = 0.2
     btn.Text = text
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 12
+    btn.TextSize = 13
     btn.Font = Enum.Font.SourceSansBold
     btn.Parent = parent
     local c = Instance.new("UICorner")
@@ -122,6 +123,44 @@ createMenuButton("Shield", SideMenu, Tab1_Shield)
 createMenuButton("Recon", SideMenu, Tab2_Recon)
 createMenuButton("UltraKill", SideMenu, Tab3_UK)
 
+local ResizeButton = Instance.new("ImageButton")
+ResizeButton.Size = UDim2.new(0, 12, 0, 12)
+ResizeButton.Position = UDim2.new(1, -12, 1, -12)
+ResizeButton.BackgroundTransparency = 1
+ResizeButton.Image = "rbxassetid://6031094038"
+ResizeButton.ImageColor3 = Color3.fromRGB(200, 200, 200)
+ResizeButton.Parent = MainFrame
+
+local isResizing = false
+local startSize, startMousePos
+
+ResizeButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isResizing = true
+        startSize = MainFrame.Size
+        startMousePos = UserInputService:GetMouseLocation()
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if isResizing and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local currMousePos = UserInputService:GetMouseLocation()
+        local delta = currMousePos - startMousePos
+        local newWidth = math.max(220, startSize.X.Offset + delta.X)
+        local newHeight = math.max(150, startSize.Y.Offset + delta.Y)
+        if not isMinimized then
+            MainFrame.Size = UDim2.new(0, newWidth, 0, newHeight)
+        end
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isResizing = false
+    end
+end)
+
+-- SHIELD TAB
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, 0, 0, 30)
 StatusLabel.Position = UDim2.new(0, 0, 0, 20)
@@ -187,7 +226,7 @@ ToggleButton.MouseButton1Click:Connect(function()
 end)
 
 local ScrollList = Instance.new("ScrollingFrame")
-ScrollList.Size = UDim2.new(1, -10, 0, 100)
+ScrollList.Size = UDim2.new(1, -10, 1, -45)
 ScrollList.Position = UDim2.new(0, 5, 0, 10)
 ScrollList.BackgroundTransparency = 0.5
 ScrollList.BackgroundColor3 = Color3.fromRGB(10, 45, 60)
@@ -202,7 +241,7 @@ UIListLayout.Parent = ScrollList
 
 local UnspyButton = Instance.new("TextButton")
 UnspyButton.Size = UDim2.new(1, -10, 0, 25)
-UnspyButton.Position = UDim2.new(0, 5, 0, 115)
+UnspyButton.Position = UDim2.new(0, 5, 1, -30)
 UnspyButton.BackgroundColor3 = Color3.fromRGB(40, 70, 90)
 UnspyButton.Text = "Unrecon"
 UnspyButton.TextColor3 = Color3.fromRGB(200, 230, 255)
@@ -214,67 +253,27 @@ local UnspyCorner = Instance.new("UICorner")
 UnspyCorner.CornerRadius = UDim.new(0, 4)
 UnspyCorner.Parent = UnspyButton
 
+local ScrollListUK = Instance.new("ScrollingFrame")
+ScrollListUK.Size = UDim2.new(1, -10, 1, -85)
+ScrollListUK.Position = UDim2.new(0, 5, 0, 10)
+ScrollListUK.BackgroundTransparency = 0.5
+ScrollListUK.BackgroundColor3 = Color3.fromRGB(10, 45, 60)
+ScrollListUK.BorderSizePixel = 0
+ScrollListUK.CanvasSize = UDim2.new(0, 0, 0, 0)
+ScrollListUK.ScrollBarThickness = 4
+ScrollListUK.Parent = Tab3_UK
+
+local UIListLayoutUK = Instance.new("UIListLayout")
+UIListLayoutUK.Padding = UDim.new(0, 4)
+UIListLayoutUK.Parent = ScrollListUK
+
 local TargetLabelUK = Instance.new("TextLabel")
+TargetLabelUK.Size = UDim2.new(1, 0, 0, 20)
+TargetLabelUK.Position = UDim2.new(0, 0, 1, -70)
+TargetLabelUK.BackgroundTransparency = 1
+TargetLabelUK.Text = "Target: NONE"
+TargetLabelUK.TextColor3 = Color3.fromRGB(255, 130, 130)
+TargetLabelUK.TextSize = 13
+TargetLabelUK.Font = Enum.Font.SourceSansBold
+TargetLabelUK.Parent = Tab3_UK
 
-local function spyOn(targetPlayer)
-    if targetPlayer and targetPlayer.Character then
-        local targetHumanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if targetHumanoid then
-            Camera.CameraSubject = targetHumanoid
-        end
-    end
-end
-
-local function updatePlayerList()
-    for _, child in pairs(ScrollList:GetChildren()) do
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    local count = 0
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= localPlayer then
-            count = count + 1
-            local PButton = Instance.new("TextButton")
-            PButton.Size = UDim2.new(1, -5, 0, 22)
-            PButton.BackgroundColor3 = Color3.fromRGB(30, 75, 95)
-            PButton.Text = p.Name
-            PButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            PButton.TextSize = 12
-            PButton.Font = Enum.Font.SourceSans
-            PButton.Parent = ScrollList
-            local pc = Instance.new("UICorner")
-            pc.CornerRadius = UDim.new(0, 4)
-            pc.Parent = PButton
-            
-            PButton.MouseButton1Click:Connect(function()
-                selectedPlayer = p
-                TargetLabelUK.Text = "Target: " .. p.Name
-                TargetLabelUK.TextColor3 = Color3.fromRGB(255, 255, 255)
-                spyOn(p)
-            end)
-        end
-    end
-    ScrollList.CanvasSize = UDim2.new(0, 0, 0, count * 26)
-end
-
-RunService.RenderStepped:Connect(function()
-    if selectedPlayer and Camera.CameraSubject ~= (selectedPlayer.Character and selectedPlayer.Character:FindFirstChildOfClass("Humanoid")) then
-        spyOn(selectedPlayer)
-    end
-end)
-
-UnspyButton.MouseButton1Click:Connect(function()
-    selectedPlayer = nil
-    TargetLabelUK.Text = "Target: NONE"
-    TargetLabelUK.TextColor3 = Color3.fromRGB(255, 130, 130)
-    if localPlayer.Character then
-        local myHumanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if myHumanoid then Camera.CameraSubject = myHumanoid end
-    end
-end)
-
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
-RunService.Stepped:Connect(function() if Tab2_Recon.Visible and #ScrollList:GetChildren() <= 1 then updatePlayerList() end end)
-
-TargetLabelUK.Size = UDim2.new(1, 0, 0, 30)
-TargetLabelUK.Position = UDim2.new(0, 0, 0, 15)
