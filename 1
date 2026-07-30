@@ -1,0 +1,652 @@
+-- Script Path: game:GetService("ReplicatedStorage").TitleModules.TitleConfig
+-- Took 0.25s to decompile.
+-- Executor: Xeno (v1.3.55)
+
+-- https://lua.expert/
+local t = {
+    DEV_PRODUCT_IDS = {
+        Basic = 3609998006,
+        Rare = 3609998046,
+        Epic = 3609998079,
+        Legendary = 3609998114
+    },
+    TIER_ORDER = { "Basic", "Rare", "Epic", "Legendary" },
+    TIER_DISPLAY_COLOR = {
+        Basic = Color3.fromRGB(190, 190, 190),
+        Rare = Color3.fromRGB(90, 160, 255),
+        Epic = Color3.fromRGB(180, 90, 255),
+        Legendary = Color3.fromRGB(255, 170, 30)
+    }
+}
+local t2 = {
+    Common = 0,
+    Rare = 1,
+    Legendary = 2
+}
+
+t.RARITY_WEIGHT = t2
+t.RARITY_DISPLAY_COLOR = {
+    Common = Color3.fromRGB(200, 200, 200),
+    Rare = Color3.fromRGB(100, 170, 255),
+    Legendary = Color3.fromRGB(255, 180, 40)
+}
+t.MIN_LENGTH = 2
+t.MAX_LENGTH = 24
+t.FONTS = {
+    {
+        name = "Legacy",
+        fontString = "Legacy",
+        rarity = "Common"
+    },
+    {
+        name = "Arial",
+        fontString = "Arial",
+        rarity = "Common"
+    },
+    {
+        name = "Arial Bold",
+        fontString = "ArialBold",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans",
+        fontString = "SourceSans",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans Light",
+        fontString = "SourceSansLight",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans Medium",
+        fontString = "SourceSansMedium",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans Italic",
+        fontString = "SourceSansItalic",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans Bold",
+        fontString = "SourceSansBold",
+        rarity = "Common"
+    },
+    {
+        name = "Source Sans Semibold",
+        fontString = "SourceSansSemibold",
+        rarity = "Common"
+    },
+    {
+        name = "Roboto",
+        fontString = "Roboto",
+        rarity = "Common"
+    },
+    {
+        name = "Roboto Mono",
+        fontString = "RobotoMono",
+        rarity = "Common"
+    },
+    {
+        name = "Roboto Condensed",
+        fontString = "RobotoCondensed",
+        rarity = "Common"
+    },
+    {
+        name = "Ubuntu",
+        fontString = "Ubuntu",
+        rarity = "Common"
+    },
+    {
+        name = "Nunito",
+        fontString = "Nunito",
+        rarity = "Common"
+    },
+    {
+        name = "Code",
+        fontString = "Code",
+        rarity = "Common"
+    },
+    {
+        name = "Gotham",
+        fontString = "Gotham",
+        rarity = "Rare"
+    },
+    {
+        name = "Gotham Medium",
+        fontString = "GothamMedium",
+        rarity = "Rare"
+    },
+    {
+        name = "Gotham Semibold",
+        fontString = "GothamSemibold",
+        rarity = "Rare"
+    },
+    {
+        name = "Gotham Bold",
+        fontString = "GothamBold",
+        rarity = "Rare"
+    },
+    {
+        name = "Gotham Black",
+        fontString = "GothamBlack",
+        rarity = "Rare"
+    },
+    {
+        name = "Highway Gothic",
+        fontString = "Highway",
+        rarity = "Rare"
+    },
+    {
+        name = "Oswald",
+        fontString = "Oswald",
+        rarity = "Rare"
+    },
+    {
+        name = "Josefin Sans",
+        fontString = "JosefinSans",
+        rarity = "Rare"
+    },
+    {
+        name = "Titillium Web",
+        fontString = "TitilliumWeb",
+        rarity = "Rare"
+    },
+    {
+        name = "Jura",
+        fontString = "Jura",
+        rarity = "Rare"
+    },
+    {
+        name = "Sarpanch",
+        fontString = "Sarpanch",
+        rarity = "Rare"
+    },
+    {
+        name = "Antique",
+        fontString = "Antique",
+        rarity = "Rare"
+    },
+    {
+        name = "Garamond",
+        fontString = "Garamond",
+        rarity = "Rare"
+    },
+    {
+        name = "Merriweather",
+        fontString = "Merriweather",
+        rarity = "Rare"
+    },
+    {
+        name = "Kalam",
+        fontString = "Kalam",
+        rarity = "Rare"
+    },
+    {
+        name = "Indie Flower",
+        fontString = "IndieFlower",
+        rarity = "Rare"
+    },
+    {
+        name = "Patrick Hand",
+        fontString = "PatrickHand",
+        rarity = "Rare"
+    },
+    {
+        name = "Special Elite",
+        fontString = "SpecialElite",
+        rarity = "Rare"
+    },
+    {
+        name = "Fantasy",
+        fontString = "Fantasy",
+        rarity = "Legendary"
+    },
+    {
+        name = "Cartoon",
+        fontString = "Cartoon",
+        rarity = "Legendary"
+    },
+    {
+        name = "Bangers",
+        fontString = "Bangers",
+        rarity = "Legendary"
+    },
+    {
+        name = "Sci-Fi",
+        fontString = "SciFi",
+        rarity = "Legendary"
+    },
+    {
+        name = "Michroma",
+        fontString = "Michroma",
+        rarity = "Legendary"
+    },
+    {
+        name = "Fondamento",
+        fontString = "Fondamento",
+        rarity = "Legendary"
+    },
+    {
+        name = "Permanent Marker",
+        fontString = "PermanentMarker",
+        rarity = "Legendary"
+    },
+    {
+        name = "Luckiest Guy",
+        fontString = "LuckiestGuy",
+        rarity = "Legendary"
+    }
+}
+t.COLOR_PRESETS = {
+    {
+        name = "White",
+        rarity = "Common",
+        color = Color3.fromRGB(255, 255, 255)
+    },
+    {
+        name = "Light Gray",
+        rarity = "Common",
+        color = Color3.fromRGB(190, 190, 190)
+    },
+    {
+        name = "Gray",
+        rarity = "Common",
+        color = Color3.fromRGB(130, 130, 130)
+    },
+    {
+        name = "Red",
+        rarity = "Common",
+        color = Color3.fromRGB(220, 50, 50)
+    },
+    {
+        name = "Orange",
+        rarity = "Common",
+        color = Color3.fromRGB(255, 140, 40)
+    },
+    {
+        name = "Yellow",
+        rarity = "Common",
+        color = Color3.fromRGB(255, 220, 60)
+    },
+    {
+        name = "Green",
+        rarity = "Common",
+        color = Color3.fromRGB(70, 200, 90)
+    },
+    {
+        name = "Blue",
+        rarity = "Common",
+        color = Color3.fromRGB(60, 140, 255)
+    },
+    {
+        name = "Brown",
+        rarity = "Common",
+        color = Color3.fromRGB(140, 95, 60)
+    },
+    {
+        name = "Teal",
+        rarity = "Common",
+        color = Color3.fromRGB(50, 170, 170)
+    },
+    {
+        name = "Lime",
+        rarity = "Common",
+        color = Color3.fromRGB(170, 230, 60)
+    },
+    {
+        name = "Sky Blue",
+        rarity = "Common",
+        color = Color3.fromRGB(120, 190, 255)
+    },
+    {
+        name = "Purple",
+        rarity = "Rare",
+        color = Color3.fromRGB(160, 80, 240)
+    },
+    {
+        name = "Hot Pink",
+        rarity = "Rare",
+        color = Color3.fromRGB(255, 90, 180)
+    },
+    {
+        name = "Cyan",
+        rarity = "Rare",
+        color = Color3.fromRGB(60, 240, 240)
+    },
+    {
+        name = "Deep Blue",
+        rarity = "Rare",
+        color = Color3.fromRGB(30, 70, 200)
+    },
+    {
+        name = "Crimson",
+        rarity = "Rare",
+        color = Color3.fromRGB(180, 20, 40)
+    },
+    {
+        name = "Emerald",
+        rarity = "Rare",
+        color = Color3.fromRGB(20, 180, 110)
+    },
+    {
+        name = "Turquoise",
+        rarity = "Rare",
+        color = Color3.fromRGB(40, 220, 200)
+    },
+    {
+        name = "Violet",
+        rarity = "Rare",
+        color = Color3.fromRGB(140, 60, 220)
+    },
+    {
+        name = "Coral",
+        rarity = "Rare",
+        color = Color3.fromRGB(255, 110, 90)
+    },
+    {
+        name = "Magenta",
+        rarity = "Rare",
+        color = Color3.fromRGB(230, 50, 200)
+    },
+    {
+        name = "Steel Blue",
+        rarity = "Rare",
+        color = Color3.fromRGB(80, 120, 190)
+    },
+    {
+        name = "Black",
+        rarity = "Rare",
+        color = Color3.fromRGB(20, 20, 20)
+    },
+    {
+        name = "Gold",
+        rarity = "Legendary",
+        color = Color3.fromRGB(255, 205, 60)
+    },
+    {
+        name = "Rose Gold",
+        rarity = "Legendary",
+        color = Color3.fromRGB(255, 160, 150)
+    },
+    {
+        name = "Neon Pink",
+        rarity = "Legendary",
+        color = Color3.fromRGB(255, 20, 150)
+    },
+    {
+        name = "Neon Green",
+        rarity = "Legendary",
+        color = Color3.fromRGB(80, 255, 90)
+    },
+    {
+        name = "Electric Blue",
+        rarity = "Legendary",
+        color = Color3.fromRGB(30, 150, 255)
+    },
+    {
+        name = "Royal Purple",
+        rarity = "Legendary",
+        color = Color3.fromRGB(120, 30, 200)
+    },
+    {
+        name = "Blood Red",
+        rarity = "Legendary",
+        color = Color3.fromRGB(160, 0, 0)
+    },
+    {
+        name = "Platinum White",
+        rarity = "Legendary",
+        color = Color3.fromRGB(245, 250, 255)
+    },
+    {
+        name = "Obsidian Black",
+        rarity = "Legendary",
+        color = Color3.fromRGB(8, 8, 10)
+    },
+    {
+        name = "Fire Orange",
+        rarity = "Legendary",
+        color = Color3.fromRGB(255, 90, 20)
+    },
+    {
+        name = "Galaxy Violet",
+        rarity = "Legendary",
+        color = Color3.fromRGB(90, 20, 160)
+    },
+    {
+        name = "Diamond Cyan",
+        rarity = "Legendary",
+        color = Color3.fromRGB(90, 255, 255)
+    }
+}
+t.GRADIENT_MATCHES = {
+    Gold = { "Obsidian Black", "Blood Red", "Platinum White", "Royal Purple" },
+    ["Rose Gold"] = { "Platinum White", "Neon Pink", "Obsidian Black" },
+    ["Neon Pink"] = { "Electric Blue", "Galaxy Violet", "Obsidian Black", "Diamond Cyan" },
+    ["Neon Green"] = { "Obsidian Black", "Electric Blue", "Diamond Cyan" },
+    ["Electric Blue"] = { "Neon Pink", "Diamond Cyan", "Platinum White", "Galaxy Violet" },
+    ["Royal Purple"] = { "Gold", "Neon Pink", "Diamond Cyan", "Obsidian Black" },
+    ["Blood Red"] = { "Gold", "Obsidian Black", "Fire Orange" },
+    ["Platinum White"] = { "Royal Purple", "Electric Blue", "Rose Gold", "Gold" },
+    ["Obsidian Black"] = { "Gold", "Neon Green", "Neon Pink", "Fire Orange", "Diamond Cyan" },
+    ["Fire Orange"] = { "Blood Red", "Gold", "Obsidian Black" },
+    ["Galaxy Violet"] = { "Neon Pink", "Electric Blue", "Diamond Cyan" },
+    ["Diamond Cyan"] = { "Royal Purple", "Neon Pink", "Obsidian Black", "Electric Blue" }
+}
+t.BLOCKED_SUBSTRINGS = { "nigger", "nigga", "fag", "retard", "rape", "cunt", "porn", "sex" }
+
+local function findFont(p1) --[[ findFont | Line: 171 | Upvalues: t (copy) ]]
+    for i, v in ipairs(t.FONTS) do
+        if v.name == p1 then
+            return v
+        end
+    end
+
+    return t.FONTS[1]
+end
+
+local function findColor(p1) --[[ findColor | Line: 178 | Upvalues: t (copy) ]]
+    for i, v in ipairs(t.COLOR_PRESETS) do
+        if v.name == p1 then
+            return v
+        end
+    end
+
+    return t.COLOR_PRESETS[1]
+end
+
+function t.CalculateTier(p1, p2, p3, p4, p5) --[[ CalculateTier | Line: 186 | Upvalues: t (copy), t2 (copy) ]]
+    local v1
+
+    do
+        local __inline_returned = false
+
+        for i, v in ipairs(t.FONTS) do
+            if v.name == p1 then
+                v1 = v
+                __inline_returned = true
+
+                break
+            end
+        end
+
+        if not __inline_returned then
+            v1 = t.FONTS[1]
+        end
+    end
+
+    local v2
+
+    do
+        local __inline_returned = false
+
+        for i, v in ipairs(t.COLOR_PRESETS) do
+            if v.name == p3 then
+                v2 = v
+                __inline_returned = true
+
+                break
+            end
+        end
+
+        if not __inline_returned then
+            v2 = t.COLOR_PRESETS[1]
+        end
+    end
+
+    local v3
+
+    do
+        local __inline_returned = false
+
+        for i, v in ipairs(t.COLOR_PRESETS) do
+            if v.name == p4 then
+                v3 = v
+                __inline_returned = true
+
+                break
+            end
+        end
+
+        if not __inline_returned then
+            v3 = t.COLOR_PRESETS[1]
+        end
+    end
+
+    local sum = 0 + (t2[v1.rarity] or 0) + (t2[v2.rarity] or 0)
+
+    if p2 then
+        sum = sum + 1 + (t2[v3.rarity] or 0)
+
+        local v4 = t.GRADIENT_MATCHES[v2.name]
+        local v5 = false
+
+        if v4 then
+            for i, v in ipairs(v4) do
+                if v == v3.name then
+                    v5 = true
+
+                    break
+                end
+            end
+        end
+
+        if v5 then
+            sum = sum + 2
+        end
+    end
+
+    local v6 = string.len(p5 or "")
+
+    if v6 > 16 then
+        sum = sum + 2
+    elseif v6 > 10 then
+        sum = sum + 1
+    end
+
+    if sum >= 7 then
+        return "Legendary"
+    end
+
+    if sum >= 5 then
+        return "Epic"
+    end
+
+    if sum >= 3 then
+        return "Rare"
+    end
+
+    return "Basic"
+end
+function t.IsTextAllowed(p1) --[[ IsTextAllowed | Line: 232 | Upvalues: t (copy) ]]
+    if type(p1) ~= "string" then
+        return false, "Invalid text"
+    end
+
+    local v1 = string.len(p1)
+
+    if v1 < t.MIN_LENGTH or t.MAX_LENGTH < v1 then
+        return false, string.format("Title must be %d-%d characters", t.MIN_LENGTH, t.MAX_LENGTH)
+    end
+
+    local v2 = string.lower(p1)
+
+    for i, v in ipairs(t.BLOCKED_SUBSTRINGS) do
+        if string.find(v2, v, 1, true) then
+            return false, "Title contains a blocked word"
+        end
+    end
+
+    return true, nil
+end
+function t.GetFontEnum(p1) --[[ GetFontEnum | Line: 247 | Upvalues: t (copy) ]]
+    local v1
+
+    do
+        local __inline_returned = false
+
+        for i, v in ipairs(t.FONTS) do
+            if v.name == p1 then
+                v1 = v
+                __inline_returned = true
+
+                break
+            end
+        end
+
+        if not __inline_returned then
+            v1 = t.FONTS[1]
+        end
+    end
+
+    local ok, result = pcall(function() --[[ Line: 249 | Upvalues: v1 (copy) ]]
+        return Enum.Font[v1.fontString]
+    end)
+
+    if ok and result then
+        return result
+    end
+
+    return Enum.Font.SourceSans
+end
+function t.GetColor(p1) --[[ GetColor | Line: 258 | Upvalues: t (copy) ]]
+    local v1
+
+    do
+        local __inline_returned = false
+
+        for i, v in ipairs(t.COLOR_PRESETS) do
+            if v.name == p1 then
+                v1 = v
+                __inline_returned = true
+
+                break
+            end
+        end
+
+        if not __inline_returned then
+            v1 = t.COLOR_PRESETS[1]
+        end
+    end
+
+    return v1.color
+end
+function t.IsCuratedGradientMatch(p1, p2) --[[ IsCuratedGradientMatch | Line: 262 | Upvalues: t (copy) ]]
+    local v1 = t.GRADIENT_MATCHES[p1]
+
+    if not v1 then
+        return false
+    end
+
+    for i, v in ipairs(v1) do
+        if v == p2 then
+            return true
+        end
+    end
+
+    return false
+end
+
+return t
